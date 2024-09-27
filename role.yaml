@@ -1,0 +1,30 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: jenkins-role
+  namespace: yelp-camp
+rules:
+  - apiGroups: ["", "apps", "batch", "networking.k8s.io", "autoscaling"]
+    resources:
+      - pods
+      - configmaps
+      - events
+      - endpoints
+      - namespaces
+      - nodes
+      - persistentvolumes
+      - persistentvolumeclaims
+      - resourcequotas
+      - services
+      - daemonsets
+      - deployments
+      - replicasets
+      - jobs
+      - ingresses
+      - horizontalpodautoscalers
+      - componentstatuses
+      - limitranges
+      - replicationcontrollers
+      - serviceaccounts
+      - secrets
+    verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
