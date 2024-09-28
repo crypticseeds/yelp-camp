@@ -4,59 +4,30 @@ metadata:
   name: {{ include "yelp-camp.fullname" . }}-nginx
   labels:
     {{- include "yelp-camp.labels" . | nindent 4 }}
-    app.kubernetes.io/component: nginx
 spec:
   replicas: 1
   selector:
     matchLabels:
       {{- include "yelp-camp.selectorLabels" . | nindent 6 }}
-      app.kubernetes.io/component: nginx
   template:
     metadata:
       labels:
         {{- include "yelp-camp.selectorLabels" . | nindent 8 }}
-        app.kubernetes.io/component: nginx
     spec:
-      volumes:
-        - name: nginx-config
-          configMap:
-            name: {{ include "yelp-camp.fullname" . }}-nginx-config
-        - name: certbot-config
-          emptyDir: {}
-        - name: certbot-work
-          emptyDir: {}
-        - name: nginx-logs
-          emptyDir: {}
       containers:
         - name: nginx
-          image: "{{ .Values.nginx.image.repository }}:{{ .Values.nginx.image.tag }}"
-          command: ["/bin/sh", "-c"]
-          args:
-            - |
-              nginx -t &&
-              nginx -g 'daemon off;'
+          image: nginx:stable
           ports:
             - containerPort: 80
-            - containerPort: 443
-          volumeMounts:
-            - name: nginx-config
-              mountPath: /etc/nginx/nginx.conf
-              subPath: nginx.conf
-            - name: certbot-config
-              mountPath: /etc/letsencrypt
-            - name: certbot-work
-              mountPath: /var/www/certbot
-            - name: nginx-logs
-              mountPath: /var/log/nginx
           readinessProbe:
             httpGet:
               path: /
               port: 80
-            initialDelaySeconds: 30
+            initialDelaySeconds: 10
             periodSeconds: 10
           livenessProbe:
             httpGet:
               path: /
               port: 80
-            initialDelaySeconds: 60
+            initialDelaySeconds: 15
             periodSeconds: 20
