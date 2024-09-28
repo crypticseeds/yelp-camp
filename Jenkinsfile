@@ -8,7 +8,6 @@ pipeline {
         nodejs 'NodeJS'
         dockerTool 'docker'
     }
-    /*
     environment {
         CLOUDINARY_CLOUD_NAME = credentials('CLOUDINARY_CLOUD_NAME')
         CLOUDINARY_KEY = credentials('CLOUDINARY_KEY')
@@ -17,8 +16,6 @@ pipeline {
         DB_URL = credentials('DB_URL')
         SECRET = credentials('SECRET')
     }
-    */
-
     stages {
         stage ('Git Checkout') {
             steps {
@@ -50,7 +47,6 @@ pipeline {
                 }
             }
         }
-        /*
         stage ('Build Docker Image & Tag') {
             steps {
                 script {
@@ -92,6 +88,7 @@ pipeline {
                 }
             }
         }
+        /*
         stage ('Deploy to EKS') {
             steps {
                     withKubeCredentials(kubectlCredentials: [[caCertificate: '', clusterName: 'main-eks-cluster', contextName: '', credentialsId: 'k8-token', namespace: 'yelp-camp', serverUrl: 'https://59AD44BC10B2CE5C401C68B206DA8A53.gr7.eu-west-2.eks.amazonaws.com']]) {
