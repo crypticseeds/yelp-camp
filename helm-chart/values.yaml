@@ -30,7 +30,7 @@ nginx:
 certbot:
   image:
     repository: certbot/certbot
-    tag: latest
-  email: randoms@devopsfoundry.com
+    tag: v1.29.0
+  email: randoms@devopsfoundry.com  # Replace with your email address
 
 domain: yelpcamp.devopsfoundry.com
