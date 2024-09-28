@@ -33,6 +33,7 @@ spec:
             - --agree-tos
             - --no-eff-email
             - --force-renewal
+            - --dry-run
           volumeMounts:
             - name: certbot-config
               mountPath: /etc/letsencrypt
