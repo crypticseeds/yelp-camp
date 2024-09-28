@@ -52,7 +52,7 @@ pipeline {
         stage ('Build Docker Image & Tag') {
             steps {
                 script {
-                    withDockerRegistry(credentialsId: 'dockerhub') {
+                    withDockerRegistry(credentialsId: 'docker-cred') {
                         withCredentials([
                             string(credentialsId: 'CLOUDINARY_CLOUD_NAME', variable: 'CLOUDINARY_CLOUD_NAME'),
                             string(credentialsId: 'CLOUDINARY_KEY', variable: 'CLOUDINARY_KEY'),
@@ -84,7 +84,7 @@ pipeline {
         stage ('Push Docker Image') {
             steps {
                 script {
-                    withDockerRegistry(credentialsId: 'dockerhub') {
+                    withDockerRegistry(credentialsId: 'docker-cred') {
                         sh "docker push crypticseeds/yelp-camp:latest"
                     }
                 }
