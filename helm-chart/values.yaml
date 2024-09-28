@@ -1,0 +1,27 @@
+replicaCount: 2
+image:
+  repository: crypticseeds/yelp-camp
+  tag: latest
+  pullPolicy: IfNotPresent
+
+service:
+  type: LoadBalancer
+  port: 3000
+
+secret:
+  cloudinaryCloudName: ZHRha3plbThl
+  cloudinaryKey: MTc0NjU0MTg4Mjg3MjI4
+  cloudinarySecret: QWk1d3VpREFEX0RDVVRJbUI4YkstUmNyMllF
+  mapboxToken: c2suZXlKMUlqb2laR1p2ZFc1a2Nua3lOQ0lzSW1FaU9pSmpiVEJ5TjI5eWFXUXdOWEI2TW10ek9XMXJhSEp4Y20xaUluMC5VaUxYbVoyNlpvTHdORk45Um95WHNB
+  dbUrl: bW9uZ29kYitzcnY6Ly9kZXZvcHNmb3VuZHJ5MjQ6eThCQnpIOE5oTTBHMWx5c0B5ZWxwLWNhbXAuaXB6am8ubW9uZ29kYi5uZXQvP3JldHJ5V3JpdGVzPXRydWUmdz1tYWpvcml0eSZhcHBOYW1lPXllbHAtY2FtcA==
+  secret: eWVscC1jYW1w
+
+probes:
+  livenessProbe:
+    initialDelaySeconds: 30
+  readinessProbe:
+    initialDelaySeconds: 30
+
+rbac:
+  create: true
+  serviceAccountName: jenkins
