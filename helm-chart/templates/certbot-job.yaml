@@ -25,19 +25,20 @@ spec:
       containers:
         - name: certbot
           image: "{{ .Values.certbot.image.repository }}:{{ .Values.certbot.image.tag }}"
+          command: ["/bin/sh", "-c"]
           args:
-            - certonly
-            - --webroot
-            - -w
-            - /var/www/certbot
-            - -d
-            - {{ .Values.domain }}
-            - --email
-            - {{ .Values.certbot.email }}
-            - --agree-tos
-            - --no-eff-email
-            - --force-renewal
-            - --dry-run
+            - |
+              certbot certonly --webroot \
+                -w /var/www/certbot \
+                -d {{ .Values.domain }} \
+                --email {{ .Values.certbot.email }} \
+                --agree-tos \
+                --no-eff-email \
+                --force-renewal \
+                --rsa-key-size 4096 \
+                --verbose \
+                --keep-until-expiring \
+                --expand
           volumeMounts:
             - name: certbot-config
               mountPath: /etc/letsencrypt

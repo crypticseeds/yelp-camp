@@ -25,9 +25,16 @@ spec:
           emptyDir: {}
         - name: certbot-work
           emptyDir: {}
+        - name: nginx-logs
+          emptyDir: {}
       containers:
         - name: nginx
           image: "{{ .Values.nginx.image.repository }}:{{ .Values.nginx.image.tag }}"
+          command: ["/bin/sh", "-c"]
+          args:
+            - |
+              nginx -t &&
+              nginx -g 'daemon off;'
           ports:
             - containerPort: 80
             - containerPort: 443
@@ -39,15 +46,17 @@ spec:
               mountPath: /etc/letsencrypt
             - name: certbot-work
               mountPath: /var/www/certbot
+            - name: nginx-logs
+              mountPath: /var/log/nginx
           readinessProbe:
             httpGet:
               path: /
               port: 80
-            initialDelaySeconds: 5
+            initialDelaySeconds: 30
             periodSeconds: 10
           livenessProbe:
             httpGet:
               path: /
               port: 80
-            initialDelaySeconds: 15
+            initialDelaySeconds: 60
             periodSeconds: 20
