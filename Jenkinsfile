@@ -18,7 +18,7 @@ pipeline {
         SECRET = credentials('SECRET')
     }
     */
-    
+
     stages {
         stage ('Git Checkout') {
             steps {
@@ -44,7 +44,7 @@ pipeline {
             steps {
                 script {
                     def scannerHome = tool 'sonar-scanner'  // Moved this into a script block
-                    withSonarQubeEnv('sonarqube') {
+                    withSonarQubeEnv('sonar') {
                         sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=yelp-camp -Dsonar.projectName=yelp-camp -Dsonar.sources=."
                     }
                 }
