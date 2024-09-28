@@ -1,11 +1,11 @@
 pipeline {
     agent {
         node {
-            label 'do-agent'
+            label 'agent'
         }
     }
     tools {
-        nodejs 'node22'
+        nodejs 'NodeJs'
         dockerTool 'docker'
     }
     environment {
@@ -19,7 +19,7 @@ pipeline {
     stages {
         stage ('Git Checkout') {
             steps {
-                git branch: 'main', credentialsId: 'github', url: 'https://github.com/crypticseeds/yelp-camp.git'
+                git branch: 'main', credentialsId: 'git-cred', url: 'https://github.com/crypticseeds/ibm-interview.git'
             }
         }
         stage ('Install Dependencies') {
