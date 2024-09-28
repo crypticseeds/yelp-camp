@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "yelp-camp.fullname" . }}-nginx
+  labels:
+    {{- include "yelp-camp.labels" . | nindent 4 }}
+    app.kubernetes.io/component: nginx
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      {{- include "yelp-camp.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/component: nginx
+  template:
+    metadata:
+      labels:
+        {{- include "yelp-camp.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/component: nginx
+    spec:
+      volumes:
+        - name: nginx-config
+          configMap:
+            name: {{ include "yelp-camp.fullname" . }}-nginx-config
+        - name: certbot-config
+          emptyDir: {}
+        - name: certbot-work
+          emptyDir: {}
+      containers:
+        - name: nginx
+          image: "{{ .Values.nginx.image.repository }}:{{ .Values.nginx.image.tag }}"
+          ports:
+            - containerPort: 80
+            - containerPort: 443
+          volumeMounts:
+            - name: nginx-config
+              mountPath: /etc/nginx/nginx.conf
+              subPath: nginx.conf
+            - name: certbot-config
+              mountPath: /etc/letsencrypt
+            - name: certbot-work
+              mountPath: /var/www/certbot
