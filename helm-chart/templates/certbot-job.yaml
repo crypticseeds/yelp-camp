@@ -1,10 +1,14 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: {{ include "yelp-camp.fullname" . }}-certbot
+  name: {{ include "yelp-camp.fullname" . }}-certbot-{{ randAlphaNum 5 | lower }}
   labels:
     {{- include "yelp-camp.labels" . | nindent 4 }}
     app.kubernetes.io/component: certbot
+  annotations:
+    "helm.sh/hook": post-install,post-upgrade
+    "helm.sh/hook-weight": "-5"
+    "helm.sh/hook-delete-policy": hook-succeeded
 spec:
   template:
     metadata:
