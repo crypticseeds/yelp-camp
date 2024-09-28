@@ -1,4 +1,4 @@
-replicaCount: 3
+replicaCount: 2
 image:
   repository: crypticseeds/yelp-camp
   tag: latest
@@ -22,15 +22,6 @@ probes:
   readinessProbe:
     initialDelaySeconds: 30
 
-nginx:
-  image:
-    repository: nginx
-    tag: 1.21-alpine
-
-certbot:
-  image:
-    repository: certbot/certbot
-    tag: v1.29.0
-  email: randoms@devopsfoundry.com  # Replace with your email address
-
-domain: yelpcamp.devopsfoundry.com
+rbac:
+  create: true
+  serviceAccountName: jenkins

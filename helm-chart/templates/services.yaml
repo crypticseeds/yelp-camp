@@ -5,33 +5,10 @@ metadata:
   labels:
     {{- include "yelp-camp.labels" . | nindent 4 }}
 spec:
-  type: ClusterIP
+  type: {{ .Values.service.type }}
   ports:
     - port: {{ .Values.service.port }}
       targetPort: {{ .Values.service.port }}
       protocol: TCP
-      name: http
   selector:
     {{- include "yelp-camp.selectorLabels" . | nindent 4 }}
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: {{ include "yelp-camp.fullname" . }}-nginx
-  labels:
-    {{- include "yelp-camp.labels" . | nindent 4 }}
-    app.kubernetes.io/component: nginx
-spec:
-  type: LoadBalancer
-  ports:
-    - port: 80
-      targetPort: 80
-      protocol: TCP
-      name: http
-    - port: 443
-      targetPort: 443
-      protocol: TCP
-      name: https
-  selector:
-    {{- include "yelp-camp.selectorLabels" . | nindent 4 }}
-    app.kubernetes.io/component: nginx
