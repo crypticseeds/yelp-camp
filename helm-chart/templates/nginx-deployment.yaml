@@ -9,16 +9,30 @@ spec:
   selector:
     matchLabels:
       {{- include "yelp-camp.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/component: nginx
   template:
     metadata:
       labels:
         {{- include "yelp-camp.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/component: nginx
     spec:
+      volumes:
+        - name: nginx-config
+          configMap:
+            name: {{ include "yelp-camp.fullname" . }}-nginx-config
+        - name: certbot-webroot
+          emptyDir: {}
       containers:
         - name: nginx
-          image: nginx:stable
+          image: "{{ .Values.nginx.image.repository }}:{{ .Values.nginx.image.tag }}"
           ports:
             - containerPort: 80
+          volumeMounts:
+            - name: nginx-config
+              mountPath: /etc/nginx/nginx.conf
+              subPath: nginx.conf
+            - name: certbot-webroot
+              mountPath: /var/www/certbot
           readinessProbe:
             httpGet:
               path: /
