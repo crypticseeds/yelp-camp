@@ -8,16 +8,6 @@ pipeline {
         nodejs 'NodeJS'
         dockerTool 'docker'
     }
-    /*
-    environment {
-        CLOUDINARY_CLOUD_NAME = credentials('CLOUDINARY_CLOUD_NAME')
-        CLOUDINARY_KEY = credentials('CLOUDINARY_KEY')
-        CLOUDINARY_SECRET = credentials('CLOUDINARY_SECRET')
-        MAPBOX_TOKEN = credentials('MAPBOX_TOKEN')
-        DB_URL = credentials('DB_URL')
-        SECRET = credentials('SECRET')
-    }
-    */
     stages {
         stage ('Git Checkout') {
             steps {
@@ -53,25 +43,7 @@ pipeline {
             steps {
                 script {
                     withDockerRegistry(credentialsId: 'docker-cred') {
-                        withCredentials([
-                            string(credentialsId: 'CLOUDINARY_CLOUD_NAME', variable: 'CLOUDINARY_CLOUD_NAME'),
-                            string(credentialsId: 'CLOUDINARY_KEY', variable: 'CLOUDINARY_KEY'),
-                            string(credentialsId: 'CLOUDINARY_SECRET', variable: 'CLOUDINARY_SECRET'),
-                            string(credentialsId: 'MAPBOX_TOKEN', variable: 'MAPBOX_TOKEN'),
-                            string(credentialsId: 'DB_URL', variable: 'DB_URL'),
-                            string(credentialsId: 'SECRET', variable: 'SECRET')
-                        ])  {
-                            sh """
-                                docker build \
-                                --build-arg CLOUDINARY_CLOUD_NAME=$CLOUDINARY_CLOUD_NAME \
-                                --build-arg CLOUDINARY_KEY=$CLOUDINARY_KEY \
-                                --build-arg CLOUDINARY_SECRET=$CLOUDINARY_SECRET \
-                                --build-arg MAPBOX_TOKEN=$MAPBOX_TOKEN \
-                                --build-arg DB_URL=$DB_URL \
-                                --build-arg SECRET=$SECRET \
-                                -t crypticseeds/yelp-camp:latest .
-                                """
-                        }
+                        sh "docker build -t crypticseeds/yelp-camp:latest ."
                     }
                 }
             }
