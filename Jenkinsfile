@@ -47,6 +47,7 @@ pipeline {
                 }
             }
         }
+        /*
         stage ('Build Docker Image & Tag') {
             steps {
                 script {
@@ -104,6 +105,7 @@ pipeline {
                 }
             }
         }
+        */
         
     }
 }
