@@ -8,6 +8,7 @@ pipeline {
         nodejs 'NodeJS'
         dockerTool 'docker'
     }
+    /*
     environment {
         CLOUDINARY_CLOUD_NAME = credentials('CLOUDINARY_CLOUD_NAME')
         CLOUDINARY_KEY = credentials('CLOUDINARY_KEY')
@@ -16,6 +17,7 @@ pipeline {
         DB_URL = credentials('DB_URL')
         SECRET = credentials('SECRET')
     }
+    */
     stages {
         stage ('Git Checkout') {
             steps {
