@@ -14,6 +14,14 @@ spec:
       labels:
         {{- include "yelp-camp.selectorLabels" . | nindent 8 }}
     spec:
+      volumes:
+        - name: nginx-config
+          configMap:
+            name: {{ include "yelp-camp.fullname" . }}-nginx-config
+        - name: certbot-config
+          emptyDir: {}
+        - name: certbot-work
+          emptyDir: {}
       containers:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
@@ -33,3 +41,36 @@ spec:
               path: /
               port: {{ .Values.service.port }}
             initialDelaySeconds: {{ .Values.probes.readinessProbe.initialDelaySeconds }}
+        - name: nginx
+          image: "{{ .Values.nginx.image.repository }}:{{ .Values.nginx.image.tag }}"
+          ports:
+            - containerPort: 80
+            - containerPort: 443
+          volumeMounts:
+            - name: nginx-config
+              mountPath: /etc/nginx/nginx.conf
+              subPath: nginx.conf
+            - name: certbot-config
+              mountPath: /etc/letsencrypt
+            - name: certbot-work
+              mountPath: /var/www/certbot
+        - name: certbot
+          image: "{{ .Values.certbot.image.repository }}:{{ .Values.certbot.image.tag }}"
+          args:
+            - certonly
+            - --webroot
+            - -w
+            - /var/www/certbot
+            - -d
+            - {{ .Values.domain }}
+            - --email
+            - {{ .Values.certbot.email }}
+            - --agree-tos
+            - --no-eff-email
+            - --keep-until-expiring
+            - --non-interactive
+          volumeMounts:
+            - name: certbot-config
+              mountPath: /etc/letsencrypt
+            - name: certbot-work
+              mountPath: /var/www/certbot

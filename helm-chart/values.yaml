@@ -22,6 +22,15 @@ probes:
   readinessProbe:
     initialDelaySeconds: 30
 
-rbac:
-  create: true
-  serviceAccountName: jenkins
+nginx:
+  image:
+    repository: nginx
+    tag: 1.21-alpine
+
+certbot:
+  image:
+    repository: certbot/certbot
+    tag: latest
+  email: randoms@devopsfoundry.com
+
+domain: yelpcamp.devopsfoundry.com
