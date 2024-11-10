@@ -1,0 +1,8 @@
+# Add this value to gitignore before committing
+
+doppler:
+  serviceToken: "dp.st.dev.IJtuToBjWouTye1oCD9W4gWeIIaB7R4mvKcqD4MCUfp" # Replace with your Doppler service token
+
+replicaCount: 1  
+service:
+  type: ClusterIP  
