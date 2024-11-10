@@ -22,9 +22,11 @@ spec:
             requests:
               memory: {{ .Values.resources.requests.memory | quote }}
               cpu: {{ .Values.resources.requests.cpu | quote }}
+              ephemeral-storage: "256Mi"
             limits:
               memory: {{ .Values.resources.limits.memory | quote }}
               cpu: {{ .Values.resources.limits.cpu | quote }}
+              ephemeral-storage: "512Mi"
           ports:
             - containerPort: {{ .Values.service.port }}
           envFrom:
