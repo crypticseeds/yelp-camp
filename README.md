@@ -33,3 +33,32 @@ docker compose up
 ![](./images/home.jpg)
 ![](./images/campgrounds.jpg)
 ![](./images/register.jpg)
+
+First-time cluster setup (one-time only):
+# Install Doppler Operator using Helm
+helm repo add doppler https://helm.doppler.com
+helm install doppler-operator doppler/doppler-kubernetes-operator
+
+For your application deployment:
+
+# 1. Create Doppler Service Token
+doppler login
+doppler setup
+doppler configs tokens create --name "k8s-yelp-camp" --config prd
+# This will output a token like dp.st.xxxx.xxxx
+Create a new file called `doppler-values.yaml` in the `helm-chart/templates` directory and add the following content:
+```sh
+doppler:
+  serviceToken: "dp.st.xxxx"
+
+replicaCount: 1
+service:
+  type: ClusterIP 
+```
+
+# 2. Deploy your application with the token
+helm install yelp-camp ./helm-chart --set doppler.serviceToken=dp.st.xxxx.xxxx
+
+
+
+helm install yelp-camp . -f values.yaml -f doppler-values.yaml
