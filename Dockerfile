@@ -1,20 +1,28 @@
-# Use Node 18 as parent image
-FROM node:18
+# Build stage
+FROM node:18-alpine
 
-# Change the working directory on the Docker image to /app
+# Add non-root user for security
+RUN addgroup -S appgroup && adduser -S appuser -G appgroup
+
+# Change working directory
 WORKDIR /app
 
-# Copy package.json and package-lock.json to the /app directory
-COPY package.json package-lock.json ./
+# Copy package files first to leverage Docker cache
+COPY package*.json ./
 
 # Install dependencies
-RUN npm install
+RUN npm install && \
+    # Clean npm cache to reduce image size
+    npm cache clean --force
 
-# Copy the rest of project files into this image
-COPY . .
+# Copy application files and set correct ownership
+COPY --chown=appuser:appgroup . .
 
-# Expose application port
+# Switch to non-root user
+USER appuser
+
+# Expose port
 EXPOSE 3000
 
 # Start the application
-CMD npm start
+CMD ["npm", "start"]
