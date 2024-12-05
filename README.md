@@ -9,9 +9,8 @@ This web application allows users to add, view, access, and rate campgrounds by 
 - **Passport package with local strategy**: For authentication and authorization.
 - **Cloudinary**: Used for cloud-based image storage.
 - **Helmet**: Enhances application security.
-- ...
 
-## Setup Instructions
+## Local Setup
 
 To get this application up and running, you'll need to set up accounts with Cloudinary, Mapbox, and MongoDB Atlas. Once these are set up, create a `.env` file in the same folder as `app.js`. This file should contain the following configurations:
 
@@ -29,24 +28,38 @@ After configuring the .env file, you can start the project by running:
 docker compose up
 ```
 
-## Application Screenshots
-![](./images/home.jpg)
-![](./images/campgrounds.jpg)
-![](./images/register.jpg)
+## Kubernetes Setup
+
+![Application Architecture](./images/architecture.png)
+
+### Doppler Secrets Management Setup
+
+Sign up for a free account at [Doppler](https://doppler.com/)
+
+1. Create a new project called `yelp-camp`
+2. Add your secrets to the project
+  
+
+#### Install Doppler Operator using Helm
 
 First-time cluster setup (one-time only):
-# Install Doppler Operator using Helm
+
+```sh
 helm repo add doppler https://helm.doppler.com
 helm install doppler-operator doppler/doppler-kubernetes-operator
+```
 
-For your application deployment:
+####  For your application deployment:
 
-# 1. Create Doppler Service Token
+  1. Create Doppler Service Token
+```sh
 doppler login
 doppler setup
 doppler configs tokens create --name "k8s-yelp-camp" --config prd
-# This will output a token like dp.st.xxxx.xxxx
-Create a new file called `doppler-values.yaml` in the `helm-chart/templates` directory and add the following content:
+# This will output a token like dp.st.xxxx
+```
+
+  2. Create a new file called `doppler-values.yaml` in the `helm-chart/templates` directory and add the following content:
 ```sh
 doppler:
   serviceToken: "dp.st.xxxx"
@@ -56,9 +69,18 @@ service:
   type: ClusterIP 
 ```
 
-# 2. Deploy your application with the token
-helm install yelp-camp ./helm-chart --set doppler.serviceToken=dp.st.xxxx.xxxx
+  3. Deploy application
+```sh
+helm install yelp-camp . -f doppler-values.yaml
+```
 
-
-
-helm install yelp-camp . -f values.yaml -f doppler-values.yaml
+## Application Screenshots
+![Home Page](./images/home.png)
+![Campgrounds Page](./images/campgrounds.png)
+![Register Page](./images/register.png)
+![Review Page](./images/review.png)
+![CI/CD Pipeline](./images/cicd.png)
+![Jenkins](./images/jenkins.png)
+![SonarQube](./images/sonarqube.png)
+![Doppler](./images/doppler.png)
+![Grafana](./images/grafana1.png)
